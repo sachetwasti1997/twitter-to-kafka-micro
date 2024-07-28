@@ -1,0 +1,24 @@
+{
+  "namespace": "com.twitter.to.kafka.twitter_to_kafka.dto",
+  "type": "record",
+  "name": "TwitterAvroModel",
+  "fields": [
+    {
+      "type": "long",
+      "name": "userId"
+    },
+    {
+      "name": "id",
+      "type": "long"
+    },
+    {
+      "name": "text",
+      "type": ["null", "string"]
+    },
+    {
+      "name": "createdAt",
+      "type": ["null", "long"],
+      "logicalType": ["null", "date"]
+    }
+  ]
+}

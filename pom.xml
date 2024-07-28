@@ -22,7 +22,9 @@
 		<json.version>20240303</json.version>
 		<spring-aspects.version>6.1.11</spring-aspects.version>
 		<twitter4j-stream.version>4.0.7</twitter4j-stream.version>
+		<avro.version>1.10.2</avro.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -68,7 +70,11 @@
 			<artifactId>twitter4j-stream</artifactId>
 			<version>${twitter4j-stream.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.apache.avro</groupId>
+			<artifactId>avro</artifactId>
+			<version>${avro.version}</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -88,6 +94,26 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.avro</groupId>
+				<artifactId>avro-maven-plugin</artifactId>
+				<version>${avro.version}</version>
+				<configuration>
+					<stringType>String</stringType>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>schema</goal>
+						</goals>
+						<configuration>
+							<sourceDirectory>${project.basedir}/src/main/resources/avro/</sourceDirectory>
+							<outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
