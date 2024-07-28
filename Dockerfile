@@ -11,21 +11,25 @@ RUN mvn package -DskipTests
 FROM ubuntu:24.04
 EXPOSE 8080
 
-RUN apt-get update && \
-    apt-get install -y unzip curl wget
+# Update package lists
+RUN apt-get update -qq
 
-RUN mkdir /opt/amazon-corretto-17-x64-linux-jdk
+# Install required packages
+RUN apt-get install -y wget ca-certificates
 
-RUN wget https://corretto.aws/downloads/latest/amazon-corretto-17-x64-linux-jdk.tar.gz && \
-    tar -zcvf amazon-corretto-17-x64-linux-jdk.tar.gz /opt/amazon-corretto-17-x64-linux-jdk
+# Download and install Amazon Corretto JDK (replace with desired version)
+RUN wget https://corretto.aws/downloads/latest/amazon-corretto-17-x64-linux-jdk.tar.gz \
+  && tar -xzf amazon-corretto-17-x64-linux-jdk.tar.gz -C /opt \
+  && ln -s /opt/amazon-corretto-17.0.12.7.1-linux-x64/bin/* /usr/local/bin
 
-#Setup Java Home
-ENV JAVA_HOME=/opt/amazon-corretto-21-x64-linux-jdk
-RUN export JAVA_HOME
-ENV PATH=$PATH:${JAVA_HOME}/bin
-RUN export PATH
+# Set environment variable for JAVA_HOME
+RUN export JAVA_HOME=/opt/amazon-corretto-17.0.12.7.1-linux-x64
+RUN export PATH=$JAVA_HOME/bin:$PATH
+
+# Set the default command to print the Java version
+#CMD ["java", "-version"]
 
 WORKDIR /app
 COPY --from=build /app/target/*.jar my-project.jar
-
-CMD ["java", "-jar", "my-project.jar"]
+#
+CMD ["java","-jar","my-project.jar"]

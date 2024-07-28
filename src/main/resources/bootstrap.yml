@@ -6,6 +6,6 @@ spring:
   cloud:
     config:
       name: twitter-to-kafka-service,config-client
-      uri: ${SPRING_CLOUD_CONFIG_URI:http://localhost:8888}
+      uri: ${CONFIG_SERVER_URL:http://localhost:8888}
 #      username: spring_cloud_user
 #      password: Test123@

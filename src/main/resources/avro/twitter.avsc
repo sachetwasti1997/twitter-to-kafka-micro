@@ -1,5 +1,5 @@
 {
-  "namespace": "com.twitter.to.kafka.twitter_to_kafka.dto",
+  "namespace": "com.twitter.to.kafka.twitter_to_kafka.kafka.model",
   "type": "record",
   "name": "TwitterAvroModel",
   "fields": [

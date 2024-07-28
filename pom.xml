@@ -23,6 +23,8 @@
 		<spring-aspects.version>6.1.11</spring-aspects.version>
 		<twitter4j-stream.version>4.0.7</twitter4j-stream.version>
 		<avro.version>1.10.2</avro.version>
+		<spring-kafka.version>3.2.2</spring-kafka.version>
+		<spring-retry.version>2.0.7</spring-retry.version>
 	</properties>
 
 	<dependencies>
@@ -47,6 +49,16 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aspects</artifactId>
 			<version>${spring-aspects.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+			<version>${spring-kafka.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.retry</groupId>
+			<artifactId>spring-retry</artifactId>
+			<version>${spring-retry.version}</version>
 		</dependency>
 
 
@@ -110,7 +122,7 @@
 						</goals>
 						<configuration>
 							<sourceDirectory>${project.basedir}/src/main/resources/avro/</sourceDirectory>
-							<outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+							<outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
