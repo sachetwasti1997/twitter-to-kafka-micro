@@ -1,8 +1,8 @@
 package com.twitter.to.kafka.twitter_to_kafka;
 
-import com.twitter.to.kafka.twitter_to_kafka.config.KafkaConfigData;
+import com.twitter.to.kafka.twitter_to_kafka.init.StreamInitializer;
 import com.twitter.to.kafka.twitter_to_kafka.kafka.admin.KafkaAdminClient;
-import com.twitter.to.kafka.twitter_to_kafka.runner.impl.MockKafkaStreamRunner;
+import com.twitter.to.kafka.twitter_to_kafka.runner.StreamRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -13,13 +13,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TwitterToKafkaApplication implements CommandLineRunner {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TwitterToKafkaApplication.class);
 
-	private final MockKafkaStreamRunner mockKafkaStreamRunner;
-	private final KafkaAdminClient kafkaAdminClient;
+	private final StreamRunner streamRunner;
+	private final StreamInitializer streamInitializer;
 
-	public TwitterToKafkaApplication(MockKafkaStreamRunner mockKafkaStreamRunner,
-									 KafkaAdminClient kafkaAdminClient) {
-        this.mockKafkaStreamRunner = mockKafkaStreamRunner;
-        this.kafkaAdminClient = kafkaAdminClient;
+	public TwitterToKafkaApplication(StreamRunner streamRunner,
+                                     StreamInitializer streamInitializer) {
+        this.streamRunner = streamRunner;
+        this.streamInitializer = streamInitializer;
     }
 
 	public static void main(String[] args) {
@@ -29,7 +29,7 @@ public class TwitterToKafkaApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		LOGGER.info("App Starts");
-		kafkaAdminClient.createTopics();
-		mockKafkaStreamRunner.start();
+		streamInitializer.init();
+		streamRunner.start();
 	}
 }

@@ -1,6 +1,9 @@
 package com.twitter.to.kafka.twitter_to_kafka.listener;
 
 import com.twitter.to.kafka.twitter_to_kafka.config.KafkaConfigData;
+import com.twitter.to.kafka.twitter_to_kafka.kafka.model.TwitterAvroModel;
+import com.twitter.to.kafka.twitter_to_kafka.kafka.producer.KafkaProducer;
+import com.twitter.to.kafka.twitter_to_kafka.transformer.TwitterStatusToAvroTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -12,13 +15,19 @@ public class TwitterKafkaStatusListener extends StatusAdapter {
     private final static Logger LOGGER = LoggerFactory.getLogger(TwitterKafkaStatusListener.class);
 
     private final KafkaConfigData configData;
+    private final KafkaProducer<Long, TwitterAvroModel> kafkaProducer;
+    private final TwitterStatusToAvroTransformer transformer;
 
-    public TwitterKafkaStatusListener(KafkaConfigData configData) {
+    public TwitterKafkaStatusListener(KafkaConfigData configData, KafkaProducer<Long, TwitterAvroModel> kafkaProducer, TwitterStatusToAvroTransformer transformer) {
         this.configData = configData;
+        this.kafkaProducer = kafkaProducer;
+        this.transformer = transformer;
     }
 
     @Override
     public void onStatus(Status status) {
         LOGGER.info("Received Status Text: {}, sending to the topic: {}", status.getText(), configData.getTopicName());
+        TwitterAvroModel twitterAvroModel = transformer.getModelFromStatus(status);
+        kafkaProducer.send(configData.getTopicName(), twitterAvroModel.getUserId(), twitterAvroModel);
     }
 }
