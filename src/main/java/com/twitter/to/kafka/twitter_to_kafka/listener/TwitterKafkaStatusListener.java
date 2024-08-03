@@ -6,6 +6,9 @@ import com.twitter.to.kafka.twitter_to_kafka.kafka.producer.KafkaProducer;
 import com.twitter.to.kafka.twitter_to_kafka.transformer.TwitterStatusToAvroTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.SmartLifecycle;
+import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.stereotype.Component;
 import twitter4j.Status;
 import twitter4j.StatusAdapter;
@@ -26,8 +29,9 @@ public class TwitterKafkaStatusListener extends StatusAdapter {
 
     @Override
     public void onStatus(Status status) {
-        LOGGER.info("Received Status Text: {}, sending to the topic: {}", status.getText(), configData.getTopicName());
+//        LOGGER.info("Received Status Text: {}, sending to the topic: {}", status.getText(), configData.getTopicName());
         TwitterAvroModel twitterAvroModel = transformer.getModelFromStatus(status);
+        LOGGER.info("Sending the following TwitterAvroModel: {}", twitterAvroModel);
         kafkaProducer.send(configData.getTopicName(), twitterAvroModel.getUserId(), twitterAvroModel);
     }
 }

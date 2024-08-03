@@ -3,6 +3,7 @@ package com.twitter.to.kafka.twitter_to_kafka.kafka.producer.impl;
 import com.twitter.to.kafka.twitter_to_kafka.kafka.model.TwitterAvroModel;
 import com.twitter.to.kafka.twitter_to_kafka.kafka.producer.KafkaProducer;
 import jakarta.annotation.PreDestroy;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
 
 @Service
 public class TwitterKafkaProducer implements KafkaProducer<Long, TwitterAvroModel> {
@@ -25,7 +27,8 @@ public class TwitterKafkaProducer implements KafkaProducer<Long, TwitterAvroMode
     @Override
     public void send(String topicName, Long key, TwitterAvroModel value) {
         LOGGER.info("Sending message: {}, to topic: {}", value, topicName);
-        CompletableFuture<SendResult<Long, TwitterAvroModel>> future = kafkaTemplate.send(topicName, key, value);
+        ProducerRecord<Long, TwitterAvroModel> producerRecord = new ProducerRecord<>(topicName, key, value);
+        CompletableFuture<SendResult<Long, TwitterAvroModel>> future = kafkaTemplate.send(producerRecord);
         addCallBack(topicName, value, future);
     }
 
@@ -40,6 +43,9 @@ public class TwitterKafkaProducer implements KafkaProducer<Long, TwitterAvroMode
     private static void addCallBack(String topicName, TwitterAvroModel value,
                                     CompletableFuture<SendResult<Long, TwitterAvroModel>> future) {
         future.whenComplete((res, err) -> {
+            if(err != null) {
+                LOGGER.error("Failed to send message: {}, to topic: {}", value, topicName);
+            }
             if (null != res) {
                 RecordMetadata metadata = res.getRecordMetadata();
                 LOGGER.info("Topic: {}, Partition: {}, Offset: {}, TimeStamp: {}, at time: {}",
@@ -49,8 +55,6 @@ public class TwitterKafkaProducer implements KafkaProducer<Long, TwitterAvroMode
                             metadata.timestamp(),
                             System.currentTimeMillis()
                         );
-            } else {
-                LOGGER.error("Failed to send message: {}, to topic: {}", value, topicName);
             }
         });
     }

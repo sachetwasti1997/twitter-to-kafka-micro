@@ -59,7 +59,7 @@ public class KafkaAdminClient {
     }
 
     public void checkTopicsCreated() {
-        Executors.newSingleThreadExecutor().submit(() -> {
+//        Executors.newSingleThreadExecutor().submit(() -> {
             Collection<TopicListing> topicListings = getTopics();
             int retryCount = 1;
             int maxRetry = retryConfigData.getMaxAttempts();
@@ -73,7 +73,7 @@ public class KafkaAdminClient {
                     topicListings = getTopics();
                 }
             }
-        });
+//        });
     }
 
     private boolean isTopicCreated(Collection<TopicListing> topicListings, String topicName) {

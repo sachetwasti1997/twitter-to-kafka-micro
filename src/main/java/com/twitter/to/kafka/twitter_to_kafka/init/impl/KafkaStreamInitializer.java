@@ -22,6 +22,6 @@ public class KafkaStreamInitializer implements StreamInitializer {
     @Override
     public void init() {
         kafkaAdminClient.createTopics();
-        LOGGER.info("Ready for Operation topic(s): {}", kafkaConfigData.getTopicName());
+//        LOGGER.info("Ready for Operation topic(s): {}", kafkaConfigData.getTopicName());
     }
 }

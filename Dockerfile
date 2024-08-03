@@ -3,10 +3,10 @@ FROM maven:3.8.3-openjdk-17-slim AS build
 WORKDIR /app
 
 COPY pom.xml .
-RUN mvn dependency:go-offline
+# RUN mvn dependency
 
 COPY src/ /app/src/
-RUN mvn package -DskipTests
+RUN mvn clean install -DskipTests
 
 FROM ubuntu:24.04
 EXPOSE 8080
