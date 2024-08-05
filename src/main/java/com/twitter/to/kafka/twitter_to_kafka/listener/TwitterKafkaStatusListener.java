@@ -27,6 +27,27 @@ public class TwitterKafkaStatusListener extends StatusAdapter {
         this.transformer = transformer;
     }
 
+    @Bean
+    SmartLifecycle connector(ProducerFactory<Long ,TwitterAvroModel> pf) {
+        return new SmartLifecycle() {
+
+            @Override
+            public void stop() {
+            }
+
+            @Override
+            public void start() {
+                pf.createProducer().close();
+            }
+
+            @Override
+            public boolean isRunning() {
+                return false;
+            }
+
+        };
+    }
+
     @Override
     public void onStatus(Status status) {
 //        LOGGER.info("Received Status Text: {}, sending to the topic: {}", status.getText(), configData.getTopicName());
