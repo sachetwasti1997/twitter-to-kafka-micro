@@ -9,7 +9,7 @@ COPY src/ /app/src/
 RUN mvn clean install -DskipTests
 
 FROM ubuntu:24.04
-EXPOSE 8080
+EXPOSE 8181
 
 # Update package lists
 RUN apt-get update -qq
