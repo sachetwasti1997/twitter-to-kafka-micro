@@ -94,7 +94,7 @@ public class MockKafkaStreamRunner implements StreamRunner {
                 while (true) {
                     String formattedRawJson = getFormattedRawJson(keywords, minTweetLength, maxTweetLength);
                     Status status = TwitterObjectFactory.createStatus(formattedRawJson);
-                    LOGGER.info("Message {}", formattedRawJson);
+//                    LOGGER.info("Message {}", formattedRawJson);
                     statusListener.onStatus(status);
                     sleep(sleepMs);
                 }

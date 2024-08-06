@@ -52,7 +52,7 @@ public class TwitterKafkaStatusListener extends StatusAdapter {
     public void onStatus(Status status) {
 //        LOGGER.info("Received Status Text: {}, sending to the topic: {}", status.getText(), configData.getTopicName());
         TwitterAvroModel twitterAvroModel = transformer.getModelFromStatus(status);
-        LOGGER.info("Sending the following TwitterAvroModel: {}", twitterAvroModel);
+//        LOGGER.info("Sending the following TwitterAvroModel: {}", twitterAvroModel);
         kafkaProducer.send(configData.getTopicName(), twitterAvroModel.getUserId(), twitterAvroModel);
     }
 }
