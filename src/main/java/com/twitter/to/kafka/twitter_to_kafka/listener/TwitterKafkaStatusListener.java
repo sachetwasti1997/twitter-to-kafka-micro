@@ -18,10 +18,10 @@ public class TwitterKafkaStatusListener extends StatusAdapter {
     private final static Logger LOGGER = LoggerFactory.getLogger(TwitterKafkaStatusListener.class);
 
     private final KafkaConfigData configData;
-    private final KafkaProducer<Long, TwitterAvroModel> kafkaProducer;
+    private final KafkaProducer<Long, String> kafkaProducer;
     private final TwitterStatusToAvroTransformer transformer;
 
-    public TwitterKafkaStatusListener(KafkaConfigData configData, KafkaProducer<Long, TwitterAvroModel> kafkaProducer, TwitterStatusToAvroTransformer transformer) {
+    public TwitterKafkaStatusListener(KafkaConfigData configData, KafkaProducer<Long, String> kafkaProducer, TwitterStatusToAvroTransformer transformer) {
         this.configData = configData;
         this.kafkaProducer = kafkaProducer;
         this.transformer = transformer;
@@ -51,8 +51,8 @@ public class TwitterKafkaStatusListener extends StatusAdapter {
     @Override
     public void onStatus(Status status) {
 //        LOGGER.info("Received Status Text: {}, sending to the topic: {}", status.getText(), configData.getTopicName());
-        TwitterAvroModel twitterAvroModel = transformer.getModelFromStatus(status);
-//        LOGGER.info("Sending the following TwitterAvroModel: {}", twitterAvroModel);
-        kafkaProducer.send(configData.getTopicName(), twitterAvroModel.getUserId(), twitterAvroModel);
+        String twitterAvroModel = transformer.getModelFromStatus(status);
+        LOGGER.info("Sending the following TwitterAvroModel: {}", twitterAvroModel);
+        kafkaProducer.send(configData.getTopicName(), status.getUser().getId(), twitterAvroModel);
     }
 }

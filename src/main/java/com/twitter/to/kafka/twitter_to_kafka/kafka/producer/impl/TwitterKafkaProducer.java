@@ -1,5 +1,6 @@
 package com.twitter.to.kafka.twitter_to_kafka.kafka.producer.impl;
 
+import com.google.gson.Gson;
 import com.twitter.to.kafka.twitter_to_kafka.kafka.model.TwitterAvroModel;
 import com.twitter.to.kafka.twitter_to_kafka.kafka.producer.KafkaProducer;
 import jakarta.annotation.PreDestroy;
@@ -15,20 +16,20 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 
 @Service
-public class TwitterKafkaProducer implements KafkaProducer<Long, TwitterAvroModel> {
+public class TwitterKafkaProducer implements KafkaProducer<Long, String> {
     private final static Logger LOGGER = LoggerFactory.getLogger(TwitterKafkaProducer.class);
 
-    private final KafkaTemplate<Long, TwitterAvroModel> kafkaTemplate;
+    private final KafkaTemplate<Long, String> kafkaTemplate;
 
-    public TwitterKafkaProducer(KafkaTemplate<Long, TwitterAvroModel> kafkaTemplate) {
+    public TwitterKafkaProducer(KafkaTemplate<Long, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
     @Override
-    public void send(String topicName, Long key, TwitterAvroModel value) {
+    public void send(String topicName, Long key, String value) {
 //        LOGGER.info("Sending message: {}, to topic: {}", value, topicName);
-        ProducerRecord<Long, TwitterAvroModel> producerRecord = new ProducerRecord<>(topicName, key, value);
-        CompletableFuture<SendResult<Long, TwitterAvroModel>> future = kafkaTemplate.send(producerRecord);
+        ProducerRecord<Long, String> producerRecord = new ProducerRecord<>(topicName, key, value);
+        CompletableFuture<SendResult<Long, String>> future = kafkaTemplate.send(producerRecord);
         addCallBack(topicName, value, future);
     }
 
@@ -40,8 +41,8 @@ public class TwitterKafkaProducer implements KafkaProducer<Long, TwitterAvroMode
         }
     }
 
-    private static void addCallBack(String topicName, TwitterAvroModel value,
-                                    CompletableFuture<SendResult<Long, TwitterAvroModel>> future) {
+    private static void addCallBack(String topicName, String value,
+                                    CompletableFuture<SendResult<Long, String>> future) {
         future.whenComplete((res, err) -> {
             if(err != null) {
                 LOGGER.error("Failed to send message: {}, to topic: {}", value, topicName);

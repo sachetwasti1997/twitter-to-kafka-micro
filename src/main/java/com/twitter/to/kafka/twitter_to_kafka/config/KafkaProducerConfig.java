@@ -1,6 +1,5 @@
 package com.twitter.to.kafka.twitter_to_kafka.config;
 
-import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class KafkaProducerConfig<K extends Serializable, V extends SpecificRecordBase> {
+public class KafkaProducerConfig<K extends Serializable, V extends Serializable> {
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaProducerConfig.class);
     private final KafkaConfigData kafkaConfigData;
     private final KafkaProducerConfigData kafkaProducerConfigData;
