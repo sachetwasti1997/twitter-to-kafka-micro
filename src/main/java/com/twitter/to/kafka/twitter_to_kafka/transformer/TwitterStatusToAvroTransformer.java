@@ -2,7 +2,6 @@ package com.twitter.to.kafka.twitter_to_kafka.transformer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.twitter.to.kafka.twitter_to_kafka.kafka.model.TwitterAvroModel;
 import org.springframework.stereotype.Component;
 import twitter4j.Status;

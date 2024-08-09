@@ -1,7 +1,5 @@
 package com.twitter.to.kafka.twitter_to_kafka.kafka.producer.impl;
 
-import com.google.gson.Gson;
-import com.twitter.to.kafka.twitter_to_kafka.kafka.model.TwitterAvroModel;
 import com.twitter.to.kafka.twitter_to_kafka.kafka.producer.KafkaProducer;
 import jakarta.annotation.PreDestroy;
 import org.apache.kafka.clients.producer.ProducerRecord;

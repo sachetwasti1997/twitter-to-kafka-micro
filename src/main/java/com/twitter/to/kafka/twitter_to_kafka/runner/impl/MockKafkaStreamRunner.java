@@ -6,6 +6,7 @@ import com.twitter.to.kafka.twitter_to_kafka.exception.KafkaClientException;
 import com.twitter.to.kafka.twitter_to_kafka.exception.TwitterException;
 import com.twitter.to.kafka.twitter_to_kafka.listener.TwitterKafkaStatusListener;
 import com.twitter.to.kafka.twitter_to_kafka.runner.StreamRunner;
+import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -14,12 +15,15 @@ import twitter4j.TwitterObjectFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class MockKafkaStreamRunner implements StreamRunner {
@@ -99,7 +103,7 @@ public class MockKafkaStreamRunner implements StreamRunner {
                     sleep(sleepMs);
                 }
             }catch (TwitterException | twitter4j.TwitterException ex) {
-                LOGGER.error("Error Creating twitter status");
+                LOGGER.error("Error Creating twitter status: {}", ex.getMessage());
             }
         });
     }
