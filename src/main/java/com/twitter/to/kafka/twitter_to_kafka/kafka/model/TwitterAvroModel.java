@@ -14,7 +14,7 @@ public class TwitterAvroModel {
   private Long userId;
   private String id;
   private String text;
-  private Long createdAt;
+  private String createdAt;
 }
 
 

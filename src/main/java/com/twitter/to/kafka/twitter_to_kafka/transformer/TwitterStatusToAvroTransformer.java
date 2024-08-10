@@ -13,7 +13,7 @@ public class TwitterStatusToAvroTransformer {
                  .builder()
                 .id(String.valueOf(status.getId()))
                 .userId(status.getUser().getId())
-                .createdAt(status.getCreatedAt().getTime())
+                .createdAt(status.getCreatedAt().toString())
                 .text(status.getText())
                 .build();
         ObjectMapper objectMapper = new ObjectMapper();
